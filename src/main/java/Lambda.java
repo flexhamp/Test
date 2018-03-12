@@ -9,10 +9,6 @@ public class Lambda {
         list.add("1");
         list.add("2");
         list.add("3");
-        list.add("3");
-        list.add("3");
-        list.add("3");
-        list.add("3");
 
 //        list.forEach(System.out::println);
 //        String[] strings = list.stream().toArray(String[]::new);
