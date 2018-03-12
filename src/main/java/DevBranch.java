@@ -1,8 +1,9 @@
 public class DevBranch {
 
-    public void toUpp(){}
+    public void toUp() {
+        System.out.println("Go to up!");
+    }
 
     public DevBranch() {
-
     }
 }
