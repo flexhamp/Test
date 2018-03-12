@@ -1,2 +1,6 @@
 public class Test {
+    public Test(){
+        System.out.println("Hellow! I'm Test.class");
+        System.out.println("new branch");
+    }
 }
