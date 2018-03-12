@@ -3,15 +3,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Lambda {
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         System.out.println(calculate(5, 7, (a, b) -> a + b));
         List<String> list = new ArrayList<>();
         list.add("1");
         list.add("2");
         list.add("3");
-
         list.add("5");
-
         list.add("4");
 
 //        list.forEach(System.out::println);
@@ -22,12 +20,12 @@ public class Lambda {
 
     }
 
-    public static double calculate(double a, double b, Action action){
+    public static double calculate(double a, double b, Action action) {
         return action.operation(a, b);
     }
 
     @FunctionalInterface
-    interface Action{
+    interface Action {
         double operation(double a, double b);
     }
 }
