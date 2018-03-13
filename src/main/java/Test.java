@@ -4,5 +4,7 @@ public class Test {
         System.out.println("new branch");
 
         String s = new String("new String");
+
+        System.out.println("123");
     }
 }
