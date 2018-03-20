@@ -10,8 +10,8 @@ public class Lambda {
         //BirthDate
         BirthDate birthDate1 = new BirthDate();
         Date value = new Date();
-//        birthDate1.setValue(value);
-        birthDate1.setValue(df.parse("22-03-18"));
+        birthDate1.setValue(value);
+//        birthDate1.setValue(df.parse("22-03-18"));
 
         BirthDate birthDate2 = new BirthDate();
         birthDate2.setValue(value);
@@ -21,19 +21,24 @@ public class Lambda {
 
         //IndividualName
         IndividualName individualName1 = new IndividualName();
-        individualName1.setFirstName("Test3");
-        individualName1.setLastName("Testov3");
-        individualName1.setSecondName("Test3");
+        individualName1.setFirstName("Test2");
+        individualName1.setLastName("Testov2");
+        individualName1.setSecondName("Test2");
 
         IndividualName individualName2 = new IndividualName();
         individualName2.setFirstName("Test2");
-        individualName2.setLastName("Testov1");
+        individualName2.setLastName("Testov2");
         individualName2.setSecondName("Test2");
 
         IndividualName individualName3 = new IndividualName();
         individualName3.setFirstName("Test3");
         individualName3.setLastName("Testov3");
         individualName3.setSecondName("Test3");
+
+        IndividualName individualName4 = new IndividualName();
+        individualName4.setFirstName("Test2");
+        individualName4.setLastName("Testov2");
+        individualName4.setSecondName("Test2");
 
         List<IndividualName> names1 = new ArrayList<>();
         names1.add(individualName1);
@@ -42,7 +47,7 @@ public class Lambda {
         names2.add(individualName2);
 
         List<IndividualName> names3 = new ArrayList<>();
-        names3.add(individualName2);
+        names3.add(individualName4);
         names3.add(individualName3);
 
         //Individual 1
@@ -60,22 +65,27 @@ public class Lambda {
         individual3.setNames(names3);
         individual3.setBirthDate(birthDate3);
 
-        System.out.println(individualComparator("").compare(individual3, individual1));
+//        System.out.println(individualComparator().compare(individual3, individual1));
+        List<Individual> list = Arrays.asList(individual2, individual3);
 
+        System.out.println(collectionsComparator(individualComparator()).compare(Arrays.asList(individual1), list));
 //        System.out.println(dateComparator().compare(individual3, individual2));
     }
 
 
     private static <T> Comparator<Collection<T>> collectionsComparator(Comparator<T> elemComparator) {
         return (col1, col2) -> {
+            System.out.println("col2 -> " + col2);
+            System.out.println("end of col2");
             TreeSet<T> treeSet = new TreeSet<>(elemComparator);
             treeSet.addAll(col1);
+            System.out.println(treeSet + "\n");
             return treeSet.containsAll(col2) ? 0 : 1;
         };
     }
 
     @SuppressWarnings("unchecked")
-    public static Comparator<Individual> individualComparator(String searchStrategy) {
+    public static Comparator<Individual> individualComparator() {
         return Comparator.comparing(Individual::getNames, collectionsComparator(uniComparator(
                 IndividualName::getFirstName, IndividualName::getLastName, IndividualName::getSecondName)))
                 .thenComparing(Individual::getBirthDate, uniComparator(BirthDate::getValue));
@@ -90,5 +100,6 @@ public class Lambda {
         }
         return comparator;
     }
+
 
 }
