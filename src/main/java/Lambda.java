@@ -1,8 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.function.Function;
 
 public class Lambda {
     private static SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -10,23 +9,25 @@ public class Lambda {
     public static void main(String[] args) throws ParseException {
         //BirthDate
         BirthDate birthDate1 = new BirthDate();
+        Date value = new Date();
+//        birthDate1.setValue(value);
         birthDate1.setValue(df.parse("22-03-18"));
 
         BirthDate birthDate2 = new BirthDate();
-        birthDate2.setValue(new Date());
+        birthDate2.setValue(value);
 
         BirthDate birthDate3 = new BirthDate();
-        birthDate3.setValue(new Date());
+        birthDate3.setValue(value);
 
         //IndividualName
         IndividualName individualName1 = new IndividualName();
-        individualName1.setFirstName("Test2");
-        individualName1.setLastName("Testov2");
-        individualName1.setSecondName("Test1");
+        individualName1.setFirstName("Test3");
+        individualName1.setLastName("Testov3");
+        individualName1.setSecondName("Test3");
 
         IndividualName individualName2 = new IndividualName();
         individualName2.setFirstName("Test2");
-        individualName2.setLastName("Testov2");
+        individualName2.setLastName("Testov1");
         individualName2.setSecondName("Test2");
 
         IndividualName individualName3 = new IndividualName();
@@ -61,9 +62,9 @@ public class Lambda {
 
         System.out.println(individualComparator("").compare(individual3, individual1));
 
-        System.out.println(dateComparator().compare(individual3, individual2));
+//        System.out.println(dateComparator().compare(individual3, individual2));
     }
-    
+
 
     private static <T> Comparator<Collection<T>> collectionsComparator(Comparator<T> elemComparator) {
         return (col1, col2) -> {
@@ -73,22 +74,21 @@ public class Lambda {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public static Comparator<Individual> individualComparator(String searchStrategy) {
-        Comparator<Individual> comp = Comparator.comparing(Individual::getNames, collectionsComparator(namesComparator()))
-                .thenComparing(dateComparator());
-
-        return comp;
+        return Comparator.comparing(Individual::getNames, collectionsComparator(uniComparator(
+                IndividualName::getFirstName, IndividualName::getLastName, IndividualName::getSecondName)))
+                .thenComparing(Individual::getBirthDate, uniComparator(BirthDate::getValue));
     }
 
 
-    public static Comparator<IndividualName> namesComparator() {
-        return Comparator.comparing(IndividualName::getFirstName)
-                .thenComparing(IndividualName::getLastName);
+    public static <T, R extends Comparable> Comparator<T> uniComparator(Function<T, R>... thenComparing) {
+        Comparator<T> comparator = Comparator.comparing(thenComparing[0]);
+        for (int i = 1; i < thenComparing.length; i++) {
+            System.out.println("->" + i);
+            comparator = comparator.thenComparing(thenComparing[i]);
+        }
+        return comparator;
     }
-
-    public static Comparator<Individual> dateComparator() {
-        return Comparator.comparing(Individual::getBirthDate, Comparator.comparing(BirthDate::getValue));
-    }
-
 
 }
