@@ -21,7 +21,7 @@ public class Lambda {
 
         //IndividualName
         IndividualName individualName1 = new IndividualName();
-        individualName1.setFirstName("Test2");
+        individualName1.setFirstName("test2");
         individualName1.setLastName("Testov2");
         individualName1.setSecondName("Test2");
 
@@ -87,8 +87,14 @@ public class Lambda {
     @SuppressWarnings("unchecked")
     public static Comparator<Individual> individualComparator() {
         return Comparator.comparing(Individual::getNames, collectionsComparator(uniComparator(
-                IndividualName::getFirstName, IndividualName::getLastName, IndividualName::getSecondName)))
+                IndividualName::getFirstName,
+                individualName1 -> normalize(individualName1.getLastName()),
+                individualName2 -> normalize(individualName2.getSecondName()))))
                 .thenComparing(Individual::getBirthDate, uniComparator(BirthDate::getValue));
+    }
+
+    private static String normalize(String s) {
+        return s.toUpperCase();
     }
 
 
