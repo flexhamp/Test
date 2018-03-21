@@ -19,11 +19,17 @@ public class Lambda {
         BirthDate birthDate3 = new BirthDate();
         birthDate3.setValue(value);
 
+        BirthDate birthDate4 = new BirthDate();
+        birthDate4.setValue(value);
+
+        BirthDate birthDate5 = new BirthDate();
+        birthDate5.setValue(value);
+
         //IndividualName
         IndividualName individualName1 = new IndividualName();
-        individualName1.setFirstName("test2");
-        individualName1.setLastName("Testov2");
-        individualName1.setSecondName("Test2");
+        individualName1.setFirstName("Test1");
+        individualName1.setLastName("Testov1");
+        individualName1.setSecondName("Test1");
 
         IndividualName individualName2 = new IndividualName();
         individualName2.setFirstName("Test2");
@@ -36,19 +42,38 @@ public class Lambda {
         individualName3.setSecondName("Test3");
 
         IndividualName individualName4 = new IndividualName();
-        individualName4.setFirstName("Test2");
-        individualName4.setLastName("Testov2");
-        individualName4.setSecondName("Test2");
+        individualName4.setFirstName("Test4");
+        individualName4.setLastName("Testov4");
+        individualName4.setSecondName("Test4");
+
+        IndividualName individualName5 = new IndividualName();
+        individualName5.setFirstName("Test5");
+        individualName5.setLastName("Testov5");
+        individualName5.setSecondName("Test5");
 
         List<IndividualName> names1 = new ArrayList<>();
         names1.add(individualName1);
 
         List<IndividualName> names2 = new ArrayList<>();
         names2.add(individualName2);
+        names2.add(individualName1);
 
         List<IndividualName> names3 = new ArrayList<>();
+        names3.add(individualName2);
         names3.add(individualName4);
-        names3.add(individualName3);
+        names3.add(individualName5);
+        names3.add(individualName1);
+
+        List<IndividualName> names4 = new ArrayList<>();
+        names4.add(individualName5);
+        names4.add(individualName1);
+        names4.add(individualName2);
+
+        List<IndividualName> names5 = new ArrayList<>();
+        names5.add(individualName2);
+        names5.add(individualName3);
+        names5.add(individualName1);
+        names5.add(individualName5);
 
         //Individual 1
         Individual individual1 = new Individual();
@@ -65,26 +90,31 @@ public class Lambda {
         individual3.setNames(names3);
         individual3.setBirthDate(birthDate3);
 
-//        System.out.println(individualComparator().compare(individual3, individual1));
-        List<Individual> list = Arrays.asList(individual2, individual3);
+        //Individual 4
+        Individual individual4 = new Individual();
+        individual4.setNames(names4);
+        individual4.setBirthDate(birthDate4);
+
+        //Individual 5
+        Individual individual5 = new Individual();
+        individual5.setNames(names5);
+        individual5.setBirthDate(birthDate5);
+
+        List<Individual> list = Arrays.asList(individual2, individual3, individual4, individual5);
 
         System.out.println(collectionsComparator(individualComparator()).compare(Arrays.asList(individual1), list));
 //        System.out.println(dateComparator().compare(individual3, individual2));
     }
 
 
-    private static <T> Comparator<Collection<T>> collectionsComparator(Comparator<T> elemComparator) {
+    public static <T> Comparator<Collection<T>> collectionsComparator(Comparator<T> elemComparator) {
         return (col1, col2) -> {
-            System.out.println("col2 -> " + col2);
-            System.out.println("end of col2");
             TreeSet<T> treeSet = new TreeSet<>(elemComparator);
             treeSet.addAll(col1);
-            System.out.println(treeSet + "\n");
             return treeSet.containsAll(col2) ? 0 : 1;
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static Comparator<Individual> individualComparator() {
         return Comparator.comparing(Individual::getNames, collectionsComparator(uniComparator(
                 IndividualName::getFirstName,
@@ -101,7 +131,6 @@ public class Lambda {
     public static <T, R extends Comparable> Comparator<T> uniComparator(Function<T, R>... thenComparing) {
         Comparator<T> comparator = Comparator.comparing(thenComparing[0]);
         for (int i = 1; i < thenComparing.length; i++) {
-            System.out.println("->" + i);
             comparator = comparator.thenComparing(thenComparing[i]);
         }
         return comparator;
